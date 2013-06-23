@@ -34,7 +34,7 @@ Configuration Instructions:
 	1. Upload files to your OpenCart installation.
 	2. Go to your OpenCart administration. Extensions -> Payments -> "BIPS" click [Install]
 	3. Go to your OpenCart administration. Extensions -> Payments -> "BIPS" click [Edit]
-	4. In BIPS Callback URL (https://bips.me/merchant) Enter the link to your callback of BIPS OpenCart Payment Module. (http://YOUR_OPENCART_URL/index.php?route=payment/walletbit/callback)
+	4. In BIPS Callback URL (https://bips.me/merchant) Enter the link to your callback of BIPS OpenCart Payment Module. (http://YOUR_OPENCART_URL/index.php?route=payment/BIPS/callback)
 	5. Enter a strong Secret in Merchant SECRET.
 	6. In module settings "API" <- set your BIPS API Key, which can be generate under API Keys, Invoice.
 	7. In module settings "Secret" <- Enter your BIPS Merchant Secret.
