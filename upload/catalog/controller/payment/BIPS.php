@@ -33,16 +33,27 @@ class ControllerPaymentBIPS extends Controller
 		}
 
 		$titles = substr($titles, 0, -2);
+		
+		if (in_array('curl', get_loaded_extensions()))
+		{
+			$ch = curl_init();
+			curl_setopt_array($ch, array(
+			CURLOPT_URL => 'https://bips.me/api/v1/invoice',
+			CURLOPT_USERPWD => $this->config->get('BIPS_api'),
+			CURLOPT_POSTFIELDS => 'price=' . number_format($this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false), 2, '.', '') . '&currency=' . $order_info['currency_code'] . '&item=' . $titles . '&custom=' . json_encode(array('orderid' => $order_info['order_id'], 'returnurl' => rawurlencode($this->url->link('checkout/success')), 'cancelurl' => rawurlencode($this->url->link('account/order/info&order_id=' . $order_info['order_id'])))),
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPAUTH => CURLAUTH_BASIC));
+			$response = curl_exec($ch);
+			curl_close($ch);
 
-		$ch = curl_init();
-		curl_setopt_array($ch, array(
-		CURLOPT_URL => 'https://BIPS.me/api/v1/invoice',
-		CURLOPT_USERPWD => $this->config->get('BIPS_api'),
-		CURLOPT_POSTFIELDS => 'price=' . number_format($this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false), 2, '.', '') . '&currency=' . $order_info['currency_code'] . '&item=' . $titles . '&custom=' . json_encode(array('orderid' => $order_info['order_id'], 'returnurl' => rawurlencode($this->url->link('checkout/success')), 'cancelurl' => rawurlencode($this->url->link('account/order/info&order_id=' . $order_info['order_id'])))),
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_HTTPAUTH => CURLAUTH_BASIC));
-		header('Location: ' . curl_exec($ch));
-		curl_close($ch);
+			header('Location: ' . $response);
+		}
+		else
+		{
+			print "cURL is not installed on this server, please inform the store owner.";
+		}
+
+		exit;
 	}
 	
 	public function callback()
