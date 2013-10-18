@@ -42,6 +42,8 @@ class ControllerPaymentBIPS extends Controller
 			CURLOPT_USERPWD => $this->config->get('BIPS_api'),
 			CURLOPT_POSTFIELDS => 'price=' . number_format($this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false), 2, '.', '') . '&currency=' . $order_info['currency_code'] . '&item=' . $titles . '&custom=' . json_encode(array('orderid' => $order_info['order_id'], 'returnurl' => rawurlencode($this->url->link('checkout/success')), 'cancelurl' => rawurlencode($this->url->link('account/order/info&order_id=' . $order_info['order_id'])))),
 			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_SSL_VERIFYHOST => 0,
+			CURLOPT_SSL_VERIFYPEER => 0,
 			CURLOPT_HTTPAUTH => CURLAUTH_BASIC));
 			$response = curl_exec($ch);
 			curl_close($ch);
